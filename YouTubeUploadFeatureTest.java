@@ -296,30 +296,36 @@ public class YouTubeUploadFeatureTest {
         doneButton.click();
         Thread.sleep(5000);
 
-        // Closes upload dialog
-        WebElement closeButton = driver.findElement(By.xpath("//*[@id=\"close-button\"]/ytcp-button-shape/button/yt-touch-feedback-shape/div[2]"));
-        closeButton.click();
-        Thread.sleep(3000);
+        // Closes the upload dialog only if the close popup appears
+        if (driver.findElements(By.xpath("//*[@id=\"close-button\"]/ytcp-button-shape/button/yt-touch-feedback-shape/div[2]")).size() > 0) {
+            WebElement closeButton = driver.findElement(By.xpath("//*[@id=\"close-button\"]/ytcp-button-shape/button/yt-touch-feedback-shape/div[2]"));
+            closeButton.click();
+            Thread.sleep(3000);
+
+            System.out.println("Upload dialog closed successfully.");
+        } else {
+            System.out.println("Close popup did not appear, continuing directly to Content section.");
+        }
 
         // Navigates to the Content / Videos section
         WebElement contentMenu = driver.findElement(By.xpath("//*[@id=\"menu-item-1\"]"));
         contentMenu.click();
         Thread.sleep(5000);
 
-        // Takes a screenshot as proof that uploaded video appears in Content section
+        // Takes a screenshot as proof that the uploaded video appears in Content section
         File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         File destFile = new File(screenshotPath);
         FileHandler.copy(srcFile, destFile);
         Thread.sleep(2000);
 
-        // Verifies that screenshot file exists
+        // Verifies that the screenshot file exists
         Assert.assertTrue(destFile.exists(),
                 "Screenshot of uploaded private video was not captured successfully.");
 
         System.out.println("Uploaded private video screenshot captured successfully.");
     }
 
-    // End of verifyUploadedVideoAppearsInContentAsPrivate
+// End of verifyUploadedVideoAppearsInContentAsPrivate
 
 
     // -------------------------------
