@@ -21,9 +21,7 @@ public class HomePage {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-        //options.addArguments("user-data-dir=C:\\selenium-profile");
         options.addArguments("user-data-dir=C:\\Users\\dj412\\selenium_test");
-        //options.addArguments("user-data-dir=C:/Users/dj412/AppData/Local/Google/Chrome/User Data");
         options.addArguments("profile-directory=Profile 2");
 
         driver = new ChromeDriver(options);
