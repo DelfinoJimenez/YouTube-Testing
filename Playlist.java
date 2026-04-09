@@ -1,3 +1,5 @@
+package org.example;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -32,19 +34,16 @@ public class Playlist {
 
     //defines the driver and opens YouTube homepage
     @BeforeMethod
-    void SetUp() throws InterruptedException{
+    public void ChromeSetup() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
 
-        //arguments needed to set up a Chrome profile to be automatically logged in
-        options.addArguments("--remote-debugging-port=9222");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("user-data-dir=C:\\Users\\dj412\\selenium_test");
-        options.addArguments("profile-directory=Profile 2");
+        // Connects to the already opened Chrome browser session
+        options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
 
-        //defines the driver to a Chrome driver.
         driver = new ChromeDriver(options);
+
+        // Opens a fresh new tab for the current test
+        driver.switchTo().newWindow(WindowType.TAB);
         driver.manage().window().maximize();
 
         //defaults all methods to the YouTube homepage
@@ -52,11 +51,15 @@ public class Playlist {
         Thread.sleep(3000);
     }
 
-    //quits the driver after each method
+    //The function will close only the current tab after each method
     @AfterMethod
-    void CleanUp()
+    void ChromeClose() throws InterruptedException
     {
-        driver.quit();
+        Thread.sleep(2000);
+
+        if (driver != null) {
+            driver.close();
+        }
     }
 
     //this will create a new playlist to save a video

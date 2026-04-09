@@ -1,7 +1,6 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+package org.example;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -18,28 +17,38 @@ public class MediaPlayer {
 
 
     @BeforeMethod
-    public void ChromeSetup(){
+    public void ChromeSetup() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
 
-        options.addArguments("--remote-debugging-port=9222");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("user-data-dir=C:\\Users\\dj412\\selenium_test");
-        options.addArguments("profile-directory=Profile 2");
+        // Connects to the already opened Chrome browser session
+        options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
 
         driver = new ChromeDriver(options);
+
+        // Opens a fresh new tab for the current test
+        driver.switchTo().newWindow(WindowType.TAB);
         driver.manage().window().maximize();
 
         driver.get("https://www.youtube.com/watch?v=p9X7lvgHqY4");
 
+        WebElement video = driver.findElement(By.cssSelector("video"));
+
+        //Plays THE VIDEO
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("video")));
+        video.sendKeys(Keys.SPACE);
     }
 
 
+    //The function will close only the current tab after each method
     @AfterMethod
-    void ChromeClose()
+    void ChromeClose() throws InterruptedException
     {
-        driver.quit();
+        Thread.sleep(2000);
+
+        if (driver != null) {
+            driver.close();
+        }
     }
 
     //Pause and Play
@@ -57,16 +66,13 @@ public class MediaPlayer {
         //waits for video player
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("video")));
 
-        //Clicks video to pause
+        //Clicks to pause
         video.click();
         //displays that the video is paused
         System.out.println("Video is paused");
         Thread.sleep(5000);
 
         //PLAYS THE VIDEO
-
-        //simulates mouse movement to view buttons again
-        new Actions(driver).moveToElement(video).perform();
 
         // Click play button to play
         video.click();

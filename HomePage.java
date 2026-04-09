@@ -1,3 +1,5 @@
+package org.example;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,27 +16,30 @@ public class HomePage {
 
     //
     @BeforeMethod
-    void SetUp(){
+    public void ChromeSetup() throws InterruptedException {
         ChromeOptions options = new ChromeOptions();
 
-        options.addArguments("--remote-debugging-port=9222");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("user-data-dir=C:\\Users\\dj412\\selenium_test");
-        options.addArguments("profile-directory=Profile 2");
+        // Connects to the already opened Chrome browser session
+        options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
 
         driver = new ChromeDriver(options);
+
+        // Opens a fresh new tab for the current test
+        driver.switchTo().newWindow(WindowType.TAB);
         driver.manage().window().maximize();
 
         driver.get("https://www.youtube.com");
     }
 
-    //
+    //The function will close only the current tab after each method
     @AfterMethod
-    void CleanUp()
+    void ChromeClose() throws InterruptedException
     {
-        driver.quit();
+        Thread.sleep(2000);
+
+        if (driver != null) {
+            driver.close();
+        }
     }
 
     //This test method will select the first valid video that appears on the homepage
