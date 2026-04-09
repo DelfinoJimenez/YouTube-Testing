@@ -78,7 +78,7 @@ public class HomePage {
         String currentUrl = "";
         String expectedUrl = "";
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         //Will check if the URL matches the expected URL for the history tab
         driver.findElement(By.xpath("//a[@title='History']")).click();
@@ -149,7 +149,6 @@ public class HomePage {
     @Test(priority = 4)
     void HomepageCategories() throws InterruptedException{
         Thread.sleep(3000);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
 
         //Finds all category titles displayed above homepage videos
         List<WebElement> chips = driver.findElements(By.xpath("//*[@id='chips']/yt-chip-cloud-chip-renderer"));
